@@ -1,0 +1,19 @@
+.projects {
+  background: var(--color-bg-alt);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.projects__grid {
+  margin-top: 64px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+@media (max-width: 900px) {
+  .projects__grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}

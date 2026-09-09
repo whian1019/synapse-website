@@ -1,0 +1,32 @@
+.vision {
+  position: relative;
+  text-align: center;
+  background: var(--color-bg);
+  overflow: hidden;
+}
+
+.vision__glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 700px;
+  height: 400px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--color-accent) 14%, transparent) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.vision__statement {
+  position: relative;
+  font-size: clamp(2.4rem, 7vw, 5rem);
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+.vision__text {
+  position: relative;
+  margin: 24px auto 0;
+  max-width: 460px;
+  color: var(--color-text-dim);
+  font-size: clamp(1.05rem, 2vw, 1.2rem);
+}
