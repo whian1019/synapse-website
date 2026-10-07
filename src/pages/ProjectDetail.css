@@ -2,8 +2,37 @@
   position: relative;
   padding: calc(var(--nav-height) + 96px) 0 80px;
   overflow: hidden;
-  background: linear-gradient(180deg, #101116 0%, #0a0a0d 100%);
+  /* translucent, so the particle stage behind the page shows through */
+  background: linear-gradient(180deg, rgba(22, 19, 15, 0.55) 0%, rgba(10, 9, 8, 0) 100%);
   border-bottom: 1px solid var(--color-border);
+}
+
+/* The box the particle stage draws this project's visual into (it has no
+   content of its own): a square down the right-hand side of the hero. */
+.project-detail__visual {
+  position: absolute;
+  top: calc(var(--nav-height) + 16px);
+  bottom: 16px;
+  right: max(3vw, calc((100vw - var(--container-width)) / 2));
+  aspect-ratio: 1 / 1;
+  pointer-events: none;
+}
+
+@media (max-width: 860px) {
+  /* tucked into the top-right corner so it sits beside the title rather
+     than under the text */
+  .project-detail__visual {
+    top: calc(var(--nav-height) - 10px);
+    bottom: auto;
+    right: -14%;
+    height: 52%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-detail__visual {
+    display: none;
+  }
 }
 
 .project-detail__glow {
@@ -24,6 +53,7 @@
   align-items: center;
   gap: 8px;
   font-size: 14px;
+  font-weight: 500;
   color: var(--color-text-dim);
   margin-bottom: 40px;
   transition: color var(--transition-base);
@@ -41,9 +71,9 @@
 }
 
 .project-detail__category {
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.14em;
   color: var(--card-accent);
   padding: 6px 14px;
@@ -52,21 +82,30 @@
 }
 
 .project-detail__status {
-  font-size: 13px;
-  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-dim);
 }
 
 .project-detail__title {
-  font-size: clamp(3rem, 8vw, 5.5rem);
-  letter-spacing: -0.02em;
-  margin-bottom: 20px;
+  /* Unbounded is a wide face: sized so even the longest project name fits
+     on one line on a phone */
+  font-size: clamp(2rem, 9.4vw, 5.6rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  margin-bottom: 22px;
+  text-shadow: 0 0 70px color-mix(in srgb, var(--card-accent) 40%, transparent);
 }
 
 .project-detail__oneliner {
-  font-size: clamp(1.1rem, 2.2vw, 1.4rem);
-  color: var(--color-text-dim);
+  font-size: clamp(1.15rem, 2.3vw, 1.6rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--card-accent);
   max-width: 640px;
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
 .project-detail__body {
@@ -104,13 +143,22 @@
 }
 
 .project-detail__section-title {
-  font-family: var(--font-display);
-  font-size: 13px;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--color-text-faint);
+  color: var(--color-accent);
   margin-bottom: 20px;
+}
+
+/* "[ 핵심 특징 ]" — same bracketed label style as the home page */
+.project-detail__section-title::before {
+  content: '[ ';
+}
+
+.project-detail__section-title::after {
+  content: ' ]';
 }
 
 .project-detail__features {
@@ -175,7 +223,7 @@
 
 .project-detail__devlog-date {
   display: block;
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
   font-size: 12px;
   letter-spacing: 0.1em;
   color: var(--card-accent, var(--color-accent));

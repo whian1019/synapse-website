@@ -1,0 +1,41 @@
+/* The particle stage: a fixed canvas behind the page content.
+   Sections that should show it through must not paint an opaque background
+   (see .scene in global.css).
+
+   z-index -1 works because <main> is its own stacking context (see
+   global.css): the stage paints above the page background but below every
+   piece of content inside <main>, positioned or not. */
+
+.particle-stage {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* A soft glow behind the particles whose color follows the active scene.
+   --ambient is set by ParticleStage.jsx; registering it as a <color> custom
+   property (see @property in global.css) is what lets it cross-fade instead
+   of switching instantly. */
+.stage-ambient {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  /* rests at 0.6 so ParticleStage.jsx has headroom to flash it brighter
+     each time a new scene arrives */
+  opacity: 0.6;
+  background:
+    radial-gradient(
+      ellipse 70% 55% at 50% 42%,
+      color-mix(in srgb, var(--ambient) 24%, transparent) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 50% 40% at 85% 100%,
+      color-mix(in srgb, var(--ambient) 16%, transparent) 0%,
+      transparent 70%
+    );
+}

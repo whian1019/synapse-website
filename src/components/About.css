@@ -1,53 +1,137 @@
-.about__grid {
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 64px;
-  align-items: center;
+/* About scene. Height and pinning come from .scene (global.css). */
+
+.about .scene__pin {
+  align-items: stretch;
 }
 
-.about__text {
-  margin-top: 24px;
-  font-size: clamp(1.05rem, 1.6vw, 1.2rem);
-  line-height: 1.7;
-  color: var(--color-text-dim);
-  max-width: 480px;
-}
-
-.about__keywords {
+.about__inner {
   display: flex;
   flex-direction: column;
-  gap: 0;
-  border-top: 1px solid var(--color-border);
+  justify-content: center;
+  padding-top: var(--nav-height);
+  /* keeps the copy clear of the keyword band along the bottom */
+  padding-bottom: 24vh;
 }
 
-.about__keywords li {
-  display: flex;
-  align-items: baseline;
-  gap: 20px;
-  padding: 26px 8px;
-  border-bottom: 1px solid var(--color-border);
-  font-family: var(--font-display);
-  font-size: clamp(1.6rem, 3vw, 2.1rem);
+.about__grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 56px;
+  align-items: end;
+}
+
+/* three hand-broken lines, heavy and tight */
+.about__title {
+  font-weight: 900;
+  font-size: min(clamp(2.4rem, 5.9vw, 5.4rem), 11vh);
+  line-height: 1.08;
+  letter-spacing: -0.065em;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+/* the sentence that lights up word by word */
+.about__statement {
+  max-width: 460px;
+  padding-bottom: 0.5em;
+  font-size: clamp(1.15rem, 1.75vw, 1.55rem);
   font-weight: 600;
-  letter-spacing: -0.01em;
-  transition: color var(--transition-base), padding-left var(--transition-base);
+  line-height: 1.6;
+  letter-spacing: -0.03em;
+  color: var(--color-text);
 }
 
-.about__keywords li:hover {
-  color: var(--color-accent);
-  padding-left: 16px;
+/* ---- keyword band -------------------------------------------------------- */
+
+.about__band {
+  position: absolute;
+  left: 0;
+  bottom: 7vh;
+  display: flex;
+  align-items: center;
+  gap: 0.42em;
+  font-family: var(--font-display);
+  font-size: min(10.5vw, 15vh);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  will-change: transform;
 }
 
-.about__keyword-index {
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--color-text-faint);
+.about__band-word {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42em;
+  color: var(--color-text);
+}
+
+/* a small diamond between words */
+.about__band-word::after {
+  content: '';
+  width: 0.16em;
+  height: 0.16em;
+  background: var(--color-accent);
+  transform: rotate(45deg);
+}
+
+/* Outlined words: filled with the page color and stroked, stroke painted
+   first. (A transparent fill would expose the overlapping inner contours
+   that variable fonts are drawn with.) */
+.about__band-word.is-outline {
+  color: var(--color-bg);
+  -webkit-text-stroke: 0.03em var(--color-accent);
+  paint-order: stroke fill;
 }
 
 @media (max-width: 860px) {
+  .about__inner {
+    padding-bottom: 20vh;
+  }
+
   .about__grid {
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: 22px;
+  }
+
+  .about__title {
+    font-size: min(12.4vw, 9vh);
+  }
+
+  .about__statement {
+    max-width: none;
+  }
+
+  .about__band {
+    bottom: 5vh;
+    font-size: min(17vw, 11vh);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about__inner {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  /* the band is taken out of its absolute position and shown as a static
+     strip under the copy */
+  .about__band {
+    position: static;
+    margin-top: 56px;
+    padding: 0 32px;
+    font-size: min(8vw, 4rem);
+    flex-wrap: wrap;
+    row-gap: 0.2em;
+    white-space: normal;
+  }
+
+  /* one pass through the keywords is enough when nothing is moving */
+  .about__band-word:nth-child(n + 5) {
+    display: none;
+  }
+
+  .about .scene__pin {
+    flex-direction: column;
   }
 }

@@ -1,0 +1,290 @@
+/* One full-screen pinned scene per project. --card-accent (set inline from
+   the project's data) tints the readout, bullets and decoding letters. */
+
+.project-scene .scene__pin {
+  align-items: stretch;
+}
+
+/* The box the particle stage draws into: a large square on the right-hand
+   side of the screen, behind the title. It has no content of its own. */
+.project-scene__visual {
+  position: absolute;
+  top: 13%;
+  bottom: 5%;
+  right: max(0px, calc((100vw - var(--container-width)) / 2 - 60px));
+  aspect-ratio: 1 / 1;
+  pointer-events: none;
+}
+
+/* mirrored scenes: visual on the left */
+.project-scene.is-flipped .project-scene__visual {
+  right: auto;
+  left: max(0px, calc((100vw - var(--container-width)) / 2 - 60px));
+}
+
+.project-scene__inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: var(--nav-height);
+  padding-bottom: 56px;
+}
+
+/* ---- readout line ------------------------------------------------------ */
+
+.project-scene__bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.project-scene.is-flipped .project-scene__bar {
+  justify-content: flex-end;
+}
+
+.project-scene__index {
+  color: var(--color-text);
+}
+
+.project-scene__index span {
+  color: var(--color-text-faint);
+}
+
+.project-scene__chip {
+  color: var(--card-accent);
+  padding: 5px 12px;
+  border: 1px solid color-mix(in srgb, var(--card-accent) 45%, transparent);
+  border-radius: 999px;
+}
+
+.project-scene__readout {
+  color: var(--color-text-dim);
+}
+
+/* a thin slash between readout items */
+.project-scene__readout::before {
+  content: '/';
+  margin-right: 18px;
+  color: var(--color-text-faint);
+}
+
+/* ---- title ------------------------------------------------------------- */
+
+/* The font-size is set by FitText so the name spans the page (capped by the
+   viewport height for short names). */
+.project-scene__title {
+  margin-top: 6px;
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.05em;
+  color: var(--color-text);
+  /* Glow in the project's color. A drop-shadow filter on the whole title —
+     not a text-shadow — because the letters are separate elements (see
+     DecodeText) and each one's text-shadow would tint its neighbours. */
+  filter: drop-shadow(0 0 34px color-mix(in srgb, var(--card-accent) 42%, transparent));
+}
+
+.project-scene.is-flipped .project-scene__title {
+  text-align: right;
+}
+
+/* ---- copy column -------------------------------------------------------- */
+
+.project-scene__body {
+  position: relative;
+  max-width: 500px;
+  margin-top: 22px;
+}
+
+.project-scene.is-flipped .project-scene__body {
+  margin-left: auto;
+}
+
+/* A soft pool of shadow behind the copy, so the text stays easy to read
+   wherever the particle visual happens to drift behind it. */
+.project-scene__body::before {
+  content: '';
+  position: absolute;
+  inset: -16% -24%;
+  z-index: -1;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(10, 9, 8, 0.8) 0%,
+    rgba(10, 9, 8, 0.5) 42%,
+    transparent 72%
+  );
+  pointer-events: none;
+}
+
+.project-scene__oneliner {
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.3;
+  color: var(--card-accent);
+}
+
+.project-scene__tagline {
+  margin-top: 12px;
+  font-size: clamp(0.98rem, 1.25vw, 1.06rem);
+  line-height: 1.75;
+  color: var(--color-text-dim);
+}
+
+/* feature list: numbered rows separated by hairlines */
+.project-scene__features {
+  margin-top: 22px;
+  border-top: 1px solid var(--color-border-strong);
+}
+
+.project-scene__features li {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-border-strong);
+  font-size: 0.98rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--color-text);
+}
+
+.project-scene__feature-num {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--card-accent);
+}
+
+/* link to the detail page: text + an arrow in a ring */
+.project-scene__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  /* comfortably above the 44px touch-target minimum */
+  min-height: 48px;
+  margin-top: 22px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text);
+  transition: color var(--transition-base);
+}
+
+.project-scene__cta-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid color-mix(in srgb, var(--card-accent) 55%, transparent);
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  color: var(--card-accent);
+  transition: background var(--transition-base), color var(--transition-base),
+    transform var(--transition-base);
+}
+
+.project-scene__cta:hover {
+  color: var(--card-accent);
+}
+
+.project-scene__cta:hover .project-scene__cta-arrow {
+  background: var(--card-accent);
+  color: var(--color-bg);
+  transform: translateX(6px);
+}
+
+/* Short screens (small laptops): the one-line intro and the feature list
+   already carry the description, so drop the longer paragraph to fit. */
+@media (max-height: 780px) {
+  .project-scene__tagline {
+    display: none;
+  }
+
+  .project-scene__features li {
+    padding: 9px 0;
+  }
+}
+
+/* Narrow screens: visual across the top, copy along the bottom — the same
+   in both orientations. */
+@media (max-width: 860px) {
+  .project-scene__visual,
+  .project-scene.is-flipped .project-scene__visual {
+    top: calc(var(--nav-height) - 6px);
+    bottom: auto;
+    left: 0;
+    right: 0;
+    height: 36vh;
+    height: 36svh;
+    aspect-ratio: auto;
+  }
+
+  .project-scene__inner {
+    justify-content: flex-end;
+    padding-bottom: 26px;
+  }
+
+  .project-scene.is-flipped .project-scene__bar {
+    justify-content: flex-start;
+  }
+
+  .project-scene.is-flipped .project-scene__title {
+    text-align: left;
+  }
+
+  .project-scene__bar {
+    gap: 6px 12px;
+    font-size: 11px;
+  }
+
+  .project-scene__readout::before {
+    margin-right: 12px;
+  }
+
+  .project-scene__body,
+  .project-scene.is-flipped .project-scene__body {
+    max-width: none;
+    margin-top: 14px;
+    margin-left: 0;
+  }
+
+  .project-scene__tagline {
+    display: none;
+  }
+
+  .project-scene__features {
+    margin-top: 16px;
+  }
+
+  .project-scene__features li {
+    padding: 10px 0;
+    font-size: 0.92rem;
+  }
+
+  .project-scene__cta {
+    margin-top: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* no stage and no pin: the empty visual box and the shadow behind the
+     copy have nothing to do */
+  .project-scene__visual,
+  .project-scene__body::before {
+    display: none;
+  }
+
+  .project-scene__inner {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}

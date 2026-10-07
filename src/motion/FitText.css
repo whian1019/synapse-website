@@ -1,0 +1,32 @@
+/* The wrapper is a full-width block whose font-size is set from FitText.jsx. */
+.fit-text {
+  display: block;
+  position: relative;
+  width: 100%;
+  white-space: nowrap;
+  /* a sensible size before the first measurement runs */
+  font-size: 10vw;
+}
+
+/* Hidden copy used only to measure the text's natural width at 100px.
+   It inherits family / weight / letter-spacing from the wrapper, so it
+   measures exactly what the visible text will look like. It lives inside a
+   zero-size clipping box so that, however wide it is, it can never add to
+   the page's scrollable width. */
+.fit-text__measure-box {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.fit-text__measure {
+  display: block;
+  width: max-content;
+  white-space: nowrap;
+  font-size: 100px;
+}

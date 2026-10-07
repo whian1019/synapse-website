@@ -1,0 +1,4 @@
+.scroll-read__word {
+  /* opacity is driven per word from ScrollRead.jsx */
+  will-change: opacity;
+}

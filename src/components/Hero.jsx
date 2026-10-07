@@ -1,93 +1,107 @@
-import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { useRef } from 'react';
-import NeuralBackground from './NeuralBackground.jsx';
+import { motion, useTransform, useReducedMotion } from 'framer-motion';
+import LineReveal from '../motion/LineReveal.jsx';
+import { useSceneProgress, useScrub } from '../motion/useSceneProgress.js';
+import { useStageActive } from '../motion/stageStore.js';
 import './Hero.css';
 
-const container = {
-  hidden: {},
-  show: {
-    transition: { staggerChildren: 0.12, delayChildren: 0.15 },
-  },
-};
-
-const item = {
-  hidden: { opacity: 0, y: 22 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
-};
-
+/**
+ * Opening scene.
+ *
+ * Composition: the logo floats in the middle of the screen (drawn by the
+ * particle stage, data-scene="logo" — it assembles out of a scattered cloud
+ * on load); a small monospace caption sits in each top corner; the tagline
+ * is set as a three-line headline in the bottom-left, rising line by line
+ * out of masks; the calls to action sit bottom-right.
+ *
+ * As the visitor scrolls through this pinned section the headline slides
+ * off to the left, the actions to the right, and the logo flies straight
+ * through the camera into the Projects scene.
+ *
+ * The real <img> logo stays in the markup — it is the page's <h1> (via its
+ * alt text), it marks where the particle logo should be drawn
+ * (data-stage-anchor), and it is what's shown when the stage isn't running
+ * (reduced motion / no WebGL).
+ */
 export default function Hero() {
   const sectionRef = useRef(null);
+  const { pin } = useSceneProgress(sectionRef);
+  const stageActive = useStageActive();
   const reduceMotion = useReducedMotion();
 
-  // As the hero scrolls out of view (progress 0 -> 1 across the section's
-  // own height), the content eases back and fades — a cinematic "zoom out"
-  // hand-off into the Projects section below, instead of a hard cut.
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end start'],
-  });
-  const contentScale = useTransform(scrollYProgress, [0, 1], [1, 0.88]);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-  const bgY = useTransform(scrollYProgress, [0, 1], [0, 120]);
+  // Exit, scrubbed over the first third of the pinned scroll. (The last
+  // argument of useScrub is the value used under prefers-reduced-motion.)
+  const frameOpacity = useScrub(pin, [0.06, 0.36], [1, 0], 1);
+  const headlineX = useScrub(pin, [0, 0.36], ['0vw', '-24vw'], '0vw');
+  const sideX = useScrub(pin, [0, 0.36], ['0vw', '24vw'], '0vw');
+  const captionY = useScrub(pin, [0, 0.3], [0, -48], 0);
 
-  const scaleStyle = reduceMotion ? 1 : contentScale;
-  const opacityStyle = reduceMotion ? 1 : contentOpacity;
-  const bgYStyle = reduceMotion ? 0 : bgY;
+  // Once the copy has faded out it's also hidden outright, so its (now
+  // invisible) buttons can't be clicked or tabbed to while the next scene
+  // slides over the top. The logo image inside keeps its layout box either
+  // way, which is all the particle stage needs from it.
+  const fadedOut = useTransform(pin, (v) => (v > 0.38 ? 'hidden' : 'visible'));
+  const frameVisibility = reduceMotion ? 'visible' : fadedOut;
 
   return (
-    <section id="home" className="hero" ref={sectionRef}>
-      <motion.div className="hero__bg-layer" style={{ y: bgYStyle }} aria-hidden="true">
-        <div className="hero__grid" />
-        <NeuralBackground />
-      </motion.div>
-      <div className="hero__glow" aria-hidden="true" />
-      <div className="hero__vignette" aria-hidden="true" />
+    <section
+      id="home"
+      className="scene hero"
+      data-scene="logo"
+      ref={sectionRef}
+      style={{ '--scene-vh': 200 }}
+    >
+      <div className="scene__pin hero__pin">
+        <motion.div
+          className="hero__frame"
+          style={{ opacity: frameOpacity, visibility: frameVisibility }}
+        >
+          <motion.div className="container hero__captions" style={{ y: captionY }}>
+            <p className="mono hero__caption">Independent Technology Studio</p>
+            <p className="mono hero__caption hero__caption--right">AI · GAME · TECHNOLOGY</p>
+          </motion.div>
 
-      <motion.div
-        className="container hero__content"
-        variants={container}
-        initial="hidden"
-        animate="show"
-        style={{ scale: scaleStyle, opacity: opacityStyle }}
-      >
-        <motion.p variants={item} className="hero__kicker">
-          AI · GAME · TECHNOLOGY
-        </motion.p>
+          <h1 className="hero__logo-wrap">
+            <img
+              src="/synapse-logo.png"
+              alt="SYNAPSE"
+              className={`hero__logo${stageActive ? ' is-handed-off' : ''}`}
+              width="1024"
+              height="1024"
+              fetchPriority="high"
+              data-stage-anchor
+            />
+          </h1>
 
-        <motion.h1 variants={item} className="hero__logo-wrap">
-          <img
-            src="/synapse-logo.png"
-            alt="SYNAPSE"
-            className="hero__logo"
-            width="1024"
-            height="1024"
-            fetchPriority="high"
-          />
-        </motion.h1>
+          <div className="container hero__bottom">
+            <motion.p className="hero__headline" style={{ x: headlineX }}>
+              <LineReveal
+                auto
+                delay={0.6}
+                lines={[
+                  '미래를 위한',
+                  '디지털 경험을',
+                  { content: <span className="eyebrow-accent">만듭니다.</span> },
+                ]}
+              />
+            </motion.p>
 
-        <motion.p variants={item} className="hero__tagline">
-          미래를 위한 디지털 경험을 만듭니다.
-        </motion.p>
-
-        <motion.div variants={item} className="hero__actions">
-          <a href="#projects" className="btn btn-primary">
-            프로젝트 보기 <span className="btn-arrow">→</span>
-          </a>
-          <a href="#about" className="btn btn-secondary">
-            SYNAPSE 소개
-          </a>
+            <motion.div className="hero__side" style={{ x: sideX }}>
+              <div className="hero__actions">
+                <a href="#projects" className="btn btn-primary">
+                  프로젝트 보기 <span className="btn-arrow">→</span>
+                </a>
+                <a href="#about" className="btn btn-secondary">
+                  SYNAPSE 소개
+                </a>
+              </div>
+              <p className="mono hero__scroll" aria-hidden="true">
+                Scroll <span className="hero__scroll-arrow">↓</span>
+              </p>
+            </motion.div>
+          </div>
         </motion.div>
-      </motion.div>
-
-      <motion.div
-        className="hero__scroll-cue"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.1, duration: 0.8 }}
-        aria-hidden="true"
-      >
-        <span className="hero__scroll-line" />
-      </motion.div>
+      </div>
     </section>
   );
 }

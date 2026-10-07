@@ -1,7 +1,49 @@
 .footer {
   background: var(--color-bg);
-  padding: 56px 0 40px;
+  border-top: 1px solid var(--color-border);
+  padding: 48px 0 40px;
+  overflow: hidden;
 }
+
+/* ---- giant wordmark ------------------------------------------------------ */
+
+/* The font-size is set by FitText so the name spans the container. */
+.footer__wordmark {
+  font-family: var(--font-display);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.045em;
+  user-select: none;
+}
+
+/* Outlined letters with a band of light that slowly crosses them: the fill
+   is a mostly-dark gradient, wider than the text, whose bright stripe is
+   moved across by animating its position. */
+.footer__wordmark-text {
+  display: block;
+  background: linear-gradient(
+    100deg,
+    var(--color-surface) 0%,
+    var(--color-surface) 42%,
+    var(--color-accent) 50%,
+    var(--color-surface) 58%,
+    var(--color-surface) 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--color-border-strong);
+  paint-order: stroke fill;
+  animation: footer-sheen 7s linear infinite;
+}
+
+@keyframes footer-sheen {
+  from { background-position: 120% 0; }
+  to { background-position: -20% 0; }
+}
+
+/* ---- bottom row ---------------------------------------------------------- */
 
 .footer__inner {
   display: flex;
@@ -9,8 +51,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  padding-top: 40px;
-  border-top: 1px solid var(--color-border);
+  margin-top: 28px;
 }
 
 .footer__logo {
@@ -27,15 +68,16 @@
 
 .footer__logo-text {
   font-family: var(--font-display);
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   color: var(--color-text);
 }
 
 .footer__tag {
   margin-top: 6px;
-  font-size: 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
   letter-spacing: 0.14em;
   color: var(--color-text-faint);
 }
@@ -51,6 +93,7 @@
   align-items: center;
   padding: 10px 8px;
   font-size: 14px;
+  font-weight: 500;
   color: var(--color-text-dim);
   transition: color var(--transition-base);
 }
@@ -60,7 +103,9 @@
 }
 
 .footer__copyright {
-  font-size: 13px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
   color: var(--color-text-faint);
 }
 
@@ -68,5 +113,13 @@
   .footer__inner {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* park the sheen off the text so the wordmark is a plain outline */
+  .footer__wordmark-text {
+    animation: none;
+    background-position: 120% 0;
   }
 }

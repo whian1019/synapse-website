@@ -1,0 +1,33 @@
+.line-reveal {
+  display: block;
+}
+
+/* The mask clips the line while it is below its resting position. A little
+   vertical padding (cancelled by the negative margin) keeps the tops and
+   bottoms of tall glyphs from being clipped once the line has arrived. */
+.line-reveal__mask {
+  display: block;
+  overflow: hidden;
+  padding: 0.12em 0.04em;
+  margin: -0.12em -0.04em;
+}
+
+.line-reveal__inner {
+  display: block;
+  transform-origin: 0% 100%;
+  will-change: transform;
+}
+
+/* on-load mode: rise once, staggered by --line-delay */
+.line-reveal__inner--auto {
+  animation: line-reveal-rise 1s var(--ease-out) var(--line-delay, 0s) both;
+}
+
+@keyframes line-reveal-rise {
+  from {
+    transform: translateY(108%) rotate(5deg);
+  }
+  to {
+    transform: translateY(0) rotate(0deg);
+  }
+}

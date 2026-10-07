@@ -14,7 +14,7 @@
 
 .nav--scrolled {
   height: 72px;
-  background: rgba(8, 8, 11, 0.97);
+  background: rgba(8, 8, 11, 0.86);
   backdrop-filter: blur(20px) saturate(140%);
   -webkit-backdrop-filter: blur(20px) saturate(140%);
   border-bottom: 1px solid var(--color-border);
@@ -41,27 +41,39 @@
 
 .nav__logo-text {
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: 15px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   color: var(--color-text);
 }
 
 .nav__links {
   display: flex;
   align-items: center;
-  gap: 40px;
+  gap: 36px;
   flex: 1;
   justify-content: center;
 }
 
 .nav__links a {
-  font-size: 14px;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--color-text-dim);
   transition: color var(--transition-base);
   position: relative;
   padding: 6px 0;
+}
+
+/* the small monospace index beside each link */
+.nav__num {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--color-accent);
 }
 
 .nav__links a::after {
@@ -132,12 +144,12 @@
   .nav__mobile {
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 32px;
     position: fixed;
     inset: 72px 0 0 0;
     background: rgba(10, 10, 13, 0.98);
     backdrop-filter: blur(16px);
-    padding: 40px 28px;
+    padding: 44px 28px;
     transform: translateY(-8px);
     opacity: 0;
     pointer-events: none;
@@ -153,19 +165,29 @@
   .nav__mobile nav {
     display: flex;
     flex-direction: column;
-    gap: 22px;
+    gap: 18px;
   }
 
+  /* big, heavy links — the menu is a title card of its own */
   .nav__mobile nav a {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
     font-family: var(--font-display);
-    font-size: 26px;
-    font-weight: 500;
+    font-size: 40px;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    line-height: 1.15;
     color: var(--color-text);
+  }
+
+  .nav__mobile .nav__num {
+    font-size: 12px;
   }
 
   .nav__mobile .btn {
     align-self: flex-start;
-    margin-top: 12px;
+    margin-top: 8px;
   }
 }
 

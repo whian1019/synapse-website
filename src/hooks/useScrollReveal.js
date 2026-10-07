@@ -72,35 +72,3 @@ export function useParallaxY(targetRef, distance = 60) {
 
   return reduceMotion ? 0 : y;
 }
-
-/**
- * Scrubs opacity/scale across an element's own scroll range using
- * explicit keyframes — used for the "big visual impact" transitions
- * (section statements that swell in, hold, and settle back) rather than
- * a simple in/out reveal.
- *
- * @param {import('react').RefObject} targetRef
- * @param {object} options
- * @param {number[]} [options.scale] - 4 keyframe values matching the
- *   default progress stops [0, 0.35, 0.65, 1]
- * @param {number[]} [options.opacity] - same, for opacity
- */
-export function useScrollScrubStyle(targetRef, {
-  scale = [0.88, 1, 1, 0.96],
-  opacity = [0.25, 1, 1, 0.5],
-} = {}) {
-  const reduceMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: targetRef,
-    offset: ['start 85%', 'start 20%', 'end 60%', 'end 5%'],
-  });
-
-  const scaleValue = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], scale);
-  const opacityValue = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], opacity);
-
-  if (reduceMotion) {
-    return { opacity: 1, scale: 1 };
-  }
-
-  return { opacity: opacityValue, scale: scaleValue };
-}

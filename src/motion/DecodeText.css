@@ -1,0 +1,24 @@
+.decode-text {
+  white-space: nowrap;
+}
+
+.decode-text__char {
+  display: inline-block;
+  white-space: pre;
+}
+
+/* not reached yet */
+.decode-text__char[data-state='hidden'] {
+  opacity: 0;
+}
+
+/* flickering through random glyphs */
+.decode-text__char[data-state='scramble'] {
+  color: var(--card-accent, var(--color-accent));
+  opacity: 0.85;
+}
+
+/* locked in: inherits the title's own color */
+.decode-text__char[data-state='done'] {
+  opacity: 1;
+}

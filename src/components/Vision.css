@@ -1,32 +1,74 @@
-.vision {
-  position: relative;
-  text-align: center;
-  background: var(--color-bg);
-  overflow: hidden;
+/* Vision scene. Height and pinning come from .scene (global.css). */
+
+.vision .scene__pin {
+  align-items: stretch;
 }
 
-.vision__glow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 700px;
-  height: 400px;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(ellipse, color-mix(in srgb, var(--color-accent) 14%, transparent) 0%, transparent 70%);
-  pointer-events: none;
+.vision__inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: var(--nav-height);
+  padding-bottom: 48px;
 }
 
+/* The font-size is set by FitText (on its wrapper) for all three lines. */
 .vision__statement {
-  position: relative;
-  font-size: clamp(2.4rem, 7vw, 5rem);
-  letter-spacing: -0.02em;
+  font-weight: 900;
+  line-height: 0.98;
+  letter-spacing: -0.055em;
   color: var(--color-text);
 }
 
+/* each word is a full-width line of its own */
+.vision__line {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.12em;
+  will-change: transform, opacity;
+}
+
+.vision__line--right {
+  justify-content: flex-end;
+}
+
+/* Small monospace number hanging off the top of each word. The outer span
+   keeps the statement's (huge) font-size so its padding can be measured in
+   the word's own ems — that is what lines the number up with the top of
+   the capitals at any size; the inner span carries the small type. */
+.vision__num {
+  display: flex;
+  padding-top: 0.17em;
+  line-height: 0;
+}
+
+.vision__num > span {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  color: var(--color-accent);
+}
+
 .vision__text {
-  position: relative;
-  margin: 24px auto 0;
-  max-width: 460px;
+  margin-top: 30px;
+  max-width: 420px;
+  /* tucked under the right-hand end of the statement */
+  margin-left: auto;
+  text-align: right;
   color: var(--color-text-dim);
-  font-size: clamp(1.05rem, 2vw, 1.2rem);
+  font-size: clamp(1.02rem, 1.5vw, 1.2rem);
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+@media (max-width: 860px) {
+  .vision__num > span {
+    font-size: 10px;
+  }
+
+  .vision__text {
+    margin-top: 22px;
+  }
 }

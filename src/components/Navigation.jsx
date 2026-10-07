@@ -10,6 +10,9 @@ const NAV_LINKS = [
   { label: '문의', hash: '#contact' },
 ];
 
+// "00", "01", ... shown in monospace beside each link
+const number = (i) => String(i).padStart(2, '0');
+
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -79,12 +82,13 @@ export default function Navigation() {
         </Link>
 
         <nav className="nav__links" aria-label="주 메뉴">
-          {NAV_LINKS.map((link) => (
+          {NAV_LINKS.map((link, i) => (
             <a
               key={link.label}
               href={link.hash}
               onClick={(e) => handleNavClick(e, link.hash)}
             >
+              <span className="nav__num" aria-hidden="true">{number(i)}</span>
               {link.label}
             </a>
           ))}
@@ -111,12 +115,13 @@ export default function Navigation() {
 
       <div className={`nav__mobile ${menuOpen ? 'is-open' : ''}`}>
         <nav aria-label="모바일 메뉴">
-          {NAV_LINKS.map((link) => (
+          {NAV_LINKS.map((link, i) => (
             <a
               key={link.label}
               href={link.hash}
               onClick={(e) => handleNavClick(e, link.hash)}
             >
+              <span className="nav__num" aria-hidden="true">{number(i)}</span>
               {link.label}
             </a>
           ))}

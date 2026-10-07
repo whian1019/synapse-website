@@ -1,0 +1,19 @@
+.cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* centered on the cursor: the element is moved with a transform, so its
+     own size is offset with negative margins */
+  width: 520px;
+  height: 520px;
+  margin: -260px 0 0 -260px;
+  border-radius: 50%;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--ambient) 11%, transparent) 0%,
+    transparent 65%
+  );
+  will-change: transform;
+}

@@ -3,10 +3,8 @@
    ========================================================================== */
 
 :root {
-  /* Color system — dark, cinematic, warm amber/gold accent.
-     (Re-tuned from the original teal/blue palette for a more immersive,
-     film-grade feel — contrast ratios re-verified below, each >= 4.5:1
-     for text usage against both --color-bg and --color-surface.) */
+  /* Color system — dark, cinematic, warm amber/gold accent. Each text color
+     is >= 4.5:1 against both --color-bg and --color-surface (WCAG AA). */
   --color-bg: #0a0908;
   --color-bg-alt: #0d0b09;
   --color-surface: #16130f;
@@ -16,7 +14,7 @@
 
   --color-text: #f7f3ec;
   --color-text-dim: #a8a093;
-  --color-text-faint: #8c8477; /* kept >= 4.5:1 against --color-bg and --color-surface for WCAG AA */
+  --color-text-faint: #8c8477;
 
   --color-accent: #ff9d4d;
   --color-accent-soft: rgba(255, 157, 77, 0.12);
@@ -24,8 +22,18 @@
 
   --gradient-accent: linear-gradient(120deg, #ff9d4d 0%, #ffd166 100%);
 
-  --font-display: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  /* Type system — three voices (all self-hosted, see src/main.jsx):
+       display  Unbounded: wide, heavy Latin for titles. It has no Hangul, so
+                Korean headings fall through to Noto Sans KR at the same
+                heavy weight — the stack below is ordered for exactly that.
+       body     Noto Sans KR: all Korean text and running copy.
+       mono     JetBrains Mono: small technical labels, numbers, the HUD. */
+  --font-display: 'Unbounded Variable', 'Noto Sans KR Variable', -apple-system,
+    BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-body: 'Noto Sans KR Variable', -apple-system, BlinkMacSystemFont,
+    'Apple SD Gothic Neo', 'Malgun Gothic', 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SFMono-Regular', Menlo,
+    Consolas, monospace;
 
   --container-width: 1240px;
   --nav-height: 84px;
@@ -33,6 +41,15 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-cinematic: cubic-bezier(0.22, 1, 0.36, 1);
   --transition-base: 0.4s var(--ease-out);
+}
+
+/* --ambient is the color of the glow behind the particle stage; the stage
+   sets it per scene (see ParticleStage.jsx). Registering it as a real
+   <color> lets the browser cross-fade it instead of switching instantly. */
+@property --ambient {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #ff9d4d;
 }
 
 * {
@@ -43,6 +60,7 @@
 
 html {
   scroll-behavior: smooth;
+  transition: --ambient 1.1s ease;
 }
 
 body {
@@ -52,13 +70,61 @@ body {
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* `clip` (with `hidden` as the fallback for older browsers) stops sideways
+     scrolling without turning <body> into a scroll container — which would
+     break the position:sticky pinning the scroll scenes rely on. */
   overflow-x: hidden;
+  overflow-x: clip;
   word-break: keep-all;
   overflow-wrap: break-word;
 }
 
 #root {
   min-height: 100vh;
+}
+
+/* <main> is its own stacking context, so the fixed particle stage inside it
+   (z-index -1) sits behind all page content but above the page background. */
+main,
+.footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* ==========================================================================
+   Scroll scenes
+   A .scene is a tall section; its .scene__pin child sticks to the viewport
+   for the whole time the visitor scrolls through that height. The extra
+   scroll distance is what the scene's animation is scrubbed across.
+   --scene-vh (set inline per scene) is the section's height in viewport
+   heights: 200 = one screen of pinned scrolling.
+   Scenes are transparent so the particle stage shows through.
+   ========================================================================== */
+.scene {
+  position: relative;
+  height: calc(var(--scene-vh, 200) * 1vh);
+}
+
+/* Each scene starts before the one above it has finished: the incoming
+   section begins rising (and the particle stage begins morphing) while the
+   outgoing scene is still pinned, so there's never a stretch of scrolling
+   where nothing is happening. The incoming section's content sits lower in
+   its own box than this overlap, so the two never visibly collide. */
+.scene + .scene,
+.scene + .section {
+  margin-top: -28vh;
+}
+
+.scene__pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  /* anything that slides in from off-screen is clipped here, so it can never
+     widen the page and cause sideways scrolling */
+  overflow: hidden;
 }
 
 img, svg {
@@ -85,9 +151,9 @@ ul, ol {
 
 h1, h2, h3, h4 {
   font-family: var(--font-display);
-  font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
 }
 
 .container {
@@ -102,24 +168,36 @@ h1, h2, h3, h4 {
   padding: 140px 0;
 }
 
+/* Small technical label: monospace, uppercase, widely spaced. */
+.mono {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-dim);
+}
+
+/* Section label — "[ PROJECTS ]" */
 .section-label {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  font-family: var(--font-display);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.24em;
+  gap: 0.7em;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--color-accent);
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
 .section-label::before {
-  content: '';
-  width: 22px;
-  height: 1px;
-  background: var(--color-accent);
+  content: '[';
+}
+
+.section-label::after {
+  content: ']';
 }
 
 .section-title {
@@ -135,6 +213,8 @@ h1, h2, h3, h4 {
   max-width: 560px;
 }
 
+/* Gradient text. Apply it to the element that holds the text itself — it
+   does not survive being split across individually-transformed children. */
 .eyebrow-accent {
   background: var(--gradient-accent);
   -webkit-background-clip: text;
@@ -146,9 +226,10 @@ h1, h2, h3, h4 {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   padding: 15px 28px;
   border-radius: 999px;
   transition: transform var(--transition-base), background var(--transition-base), border-color var(--transition-base), color var(--transition-base);
@@ -166,7 +247,7 @@ h1, h2, h3, h4 {
 }
 
 .btn-secondary {
-  background: transparent;
+  background: rgba(10, 9, 8, 0.4);
   color: var(--color-text);
   border: 1px solid var(--color-border-strong);
 }
@@ -178,6 +259,7 @@ h1, h2, h3, h4 {
 }
 
 .btn-arrow {
+  font-family: var(--font-mono);
   transition: transform 0.3s var(--ease-out);
 }
 
@@ -231,6 +313,14 @@ button:focus-visible,
   .container {
     padding: 0 22px;
   }
+
+  /* On narrow screens a scene's copy fills the lower part of the screen, so
+     the next scene only overlaps it slightly — any more and the incoming
+     visual would land on top of the outgoing text. */
+  .scene + .scene,
+  .scene + .section {
+    margin-top: -12vh;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -239,5 +329,25 @@ button:focus-visible,
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
+  }
+
+  /* No scroll-scrubbed animation, so no reason to pin: scenes collapse back
+     into ordinary sections that are as tall as their content. */
+  .scene {
+    height: auto;
+  }
+
+  .scene + .scene,
+  .scene + .section {
+    margin-top: 0;
+  }
+
+  /* (overflow stays hidden: with an automatic height nothing is cut off
+     vertically, and it still guards against sideways overflow) */
+  .scene__pin {
+    position: static;
+    height: auto;
+    min-height: 0;
+    padding: 120px 0;
   }
 }

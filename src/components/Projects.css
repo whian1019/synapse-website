@@ -1,19 +1,72 @@
-.projects {
-  background: var(--color-bg-alt);
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
+/* Projects title card — two giant lines over the warp starfield.
+   (Each project's own scene is styled in ProjectScene.css.) */
+
+/* Starts while the hero is still pinned (a bigger overlap than the default
+   in global.css), so the logo's fly-through turns straight into the
+   starfield instead of leaving an empty beat between the two. */
+.scene.projects-intro {
+  margin-top: -72vh;
 }
 
-.projects__grid {
-  margin-top: 64px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 28px;
+.projects-intro .scene__pin {
+  justify-content: center;
 }
 
-@media (max-width: 900px) {
-  .projects__grid {
-    grid-template-columns: 1fr;
-    gap: 24px;
+.projects-intro__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.projects-intro__inner .section-label {
+  margin-bottom: 10px;
+}
+
+/* As large as the screen allows: limited by width on tall screens and by
+   height on wide ones. */
+.projects-intro__title {
+  font-weight: 900;
+  font-size: min(18vw, 31vh);
+  line-height: 1.02;
+  letter-spacing: -0.07em;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+/* "현실로." — an outlined layer with a gradient-filled copy on top of it,
+   which Projects.jsx reveals left-to-right with a clip-path. */
+.projects-intro__wipe {
+  position: relative;
+  display: inline-block;
+}
+
+/* Outline: the letters are filled with the page color and stroked, with the
+   stroke painted first. (A transparent fill would expose the overlapping
+   inner contours that variable fonts are drawn with.) */
+.projects-intro__outline {
+  color: var(--color-bg);
+  -webkit-text-stroke: 0.028em var(--color-accent);
+  paint-order: stroke fill;
+}
+
+.projects-intro__fill {
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@media (max-width: 860px) {
+  .projects-intro__title {
+    font-size: min(20vw, 24vh);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene.projects-intro {
+    margin-top: 0;
   }
 }

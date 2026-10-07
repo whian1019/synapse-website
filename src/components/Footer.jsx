@@ -1,4 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import FitText from '../motion/FitText.jsx';
 import './Footer.css';
 
 const LINKS = [
@@ -7,6 +8,11 @@ const LINKS = [
   { label: '문의', hash: '#contact' },
 ];
 
+/**
+ * Site footer: the studio name set edge to edge as a giant outlined
+ * wordmark (with a slow sheen passing across it), and under it one quiet
+ * row — logo, links, copyright.
+ */
 export default function Footer() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -25,6 +31,13 @@ export default function Footer() {
 
   return (
     <footer className="footer">
+      {/* decorative: the name is already given by the logo link below */}
+      <div className="container footer__wordmark" aria-hidden="true">
+        <FitText text="SYNAPSE" maxVh={40}>
+          <span className="footer__wordmark-text">SYNAPSE</span>
+        </FitText>
+      </div>
+
       <div className="container footer__inner">
         <div className="footer__brand">
           <Link to="/" className="footer__logo" aria-label="SYNAPSE — 홈">

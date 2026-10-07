@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import { getProjectBySlug } from '../data/projects.js';
 import { getDevlogsByProject } from '../data/devlogs.js';
 import { useScrollRevealStyle, useParallaxY } from '../hooks/useScrollReveal.js';
+import ParticleStage from '../motion/ParticleStage.jsx';
+import CursorGlow from '../motion/CursorGlow.jsx';
 import NotFound from './NotFound.jsx';
 import './ProjectDetail.css';
 
@@ -39,10 +41,17 @@ export default function ProjectDetail() {
 
   return (
     <article className="project-detail">
+      {/* The same particle visual this project has on the home page, drawn
+          over the empty .project-detail__visual box in the hero below. */}
+      <ParticleStage />
+      <CursorGlow />
+
       <div
         className="project-detail__hero"
+        data-scene={project.slug}
         style={{ '--card-accent': project.accent }}
       >
+        <div className="project-detail__visual" data-stage-anchor aria-hidden="true" />
         <motion.div
           className="project-detail__glow"
           ref={glowRef}

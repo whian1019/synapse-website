@@ -1,0 +1,53 @@
+.scene-hud {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 22px;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 32px;
+  pointer-events: none;
+}
+
+.scene-hud__item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  /* numbers keep the same width as they change, so the readout doesn't jitter */
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+}
+
+.scene-hud__dim {
+  color: var(--color-text-faint);
+}
+
+.scene-hud__label {
+  color: var(--ambient);
+  animation: scene-hud-flash 0.7s var(--ease-out) both;
+}
+
+@keyframes scene-hud-flash {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+    letter-spacing: 0.5em;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: 0.14em;
+  }
+}
+
+/* the corners are needed for content on small screens */
+@media (max-width: 860px) {
+  .scene-hud {
+    display: none;
+  }
+}
