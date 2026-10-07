@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { motion, useScroll, useSpring } from 'framer-motion';
 import './Navigation.css';
 
 const NAV_LINKS = [
@@ -14,6 +15,17 @@ export default function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Whole-page scroll progress, shown as a thin accent bar under the nav —
+  // a small, constant reminder that the page is a single continuous story
+  // rather than separate screens. Smoothed with a spring so it doesn't
+  // feel like a raw scrollbar.
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, {
+    stiffness: 260,
+    damping: 32,
+    mass: 0.3,
+  });
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -117,6 +129,12 @@ export default function Navigation() {
           프로젝트 보기 <span className="btn-arrow">→</span>
         </a>
       </div>
+
+      <motion.div
+        className="nav__progress"
+        style={{ scaleX: progress }}
+        aria-hidden="true"
+      />
     </header>
   );
 }

@@ -3,11 +3,13 @@
   border-radius: 20px;
   background: var(--color-surface);
   overflow: hidden;
-  transition: transform var(--transition-base), border-color var(--transition-base), background var(--transition-base);
+  transition: border-color var(--transition-base), background var(--transition-base);
+  /* transform itself is owned by Framer Motion (scroll-reveal + pointer
+     tilt in ProjectCard.jsx) — only non-transform properties transition
+     here so the two systems don't fight over the same CSS property. */
 }
 
 .project-card:hover {
-  transform: translateY(-6px);
   border-color: var(--color-border-strong);
   background: var(--color-surface-hover);
 }

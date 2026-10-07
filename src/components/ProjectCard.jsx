@@ -1,16 +1,57 @@
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useScrollRevealStyle } from '../hooks/useScrollReveal.js';
 import './ProjectCard.css';
 
 export default function ProjectCard({ project, index }) {
+  const cardRef = useRef(null);
+
+  // Each card's reveal window is shifted slightly earlier than the last,
+  // so cards in a row cascade in left-to-right as you scroll past them
+  // instead of all popping in together.
+  const revealStyle = useScrollRevealStyle(cardRef, {
+    distance: 56,
+    scaleFrom: 0.92,
+    offset: [`start ${92 - index * 6}%`, `start ${58 - index * 6}%`],
+  });
+
+  const reduceMotion = useReducedMotion();
+
+  // Subtle pointer-driven tilt — a small "this card is a physical object"
+  // interaction on hover. Disabled entirely under prefers-reduced-motion.
+  const px = useMotionValue(0.5);
+  const py = useMotionValue(0.5);
+  const rotateX = useSpring(useTransform(py, [0, 1], [7, -7]), { stiffness: 300, damping: 28 });
+  const rotateY = useSpring(useTransform(px, [0, 1], [-7, 7]), { stiffness: 300, damping: 28 });
+
+  const handleMouseMove = (e) => {
+    if (reduceMotion) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    px.set((e.clientX - rect.left) / rect.width);
+    py.set((e.clientY - rect.top) / rect.height);
+  };
+
+  const handleMouseLeave = () => {
+    px.set(0.5);
+    py.set(0.5);
+  };
+
   return (
     <motion.article
+      ref={cardRef}
       className="project-card"
-      style={{ '--card-accent': project.accent }}
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.7, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+      style={{
+        '--card-accent': project.accent,
+        opacity: revealStyle.opacity,
+        y: revealStyle.y,
+        scale: revealStyle.scale,
+        rotateX: reduceMotion ? 0 : rotateX,
+        rotateY: reduceMotion ? 0 : rotateY,
+        transformPerspective: 900,
+      }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
       <Link to={`/projects/${project.slug}`} className="project-card__link">
         <div className="project-card__visual" aria-hidden="true">

@@ -3,23 +3,26 @@
    ========================================================================== */
 
 :root {
-  /* Color system — dark, restrained, single accent */
-  --color-bg: #0a0a0d;
-  --color-bg-alt: #0d0e12;
-  --color-surface: #131418;
-  --color-surface-hover: #17181d;
-  --color-border: rgba(255, 255, 255, 0.08);
-  --color-border-strong: rgba(255, 255, 255, 0.16);
+  /* Color system — dark, cinematic, warm amber/gold accent.
+     (Re-tuned from the original teal/blue palette for a more immersive,
+     film-grade feel — contrast ratios re-verified below, each >= 4.5:1
+     for text usage against both --color-bg and --color-surface.) */
+  --color-bg: #0a0908;
+  --color-bg-alt: #0d0b09;
+  --color-surface: #16130f;
+  --color-surface-hover: #1c1813;
+  --color-border: rgba(255, 237, 213, 0.08);
+  --color-border-strong: rgba(255, 237, 213, 0.16);
 
-  --color-text: #f4f5f7;
-  --color-text-dim: #9a9ba5;
-  --color-text-faint: #83848d; /* kept >= 4.5:1 against --color-bg and --color-surface for WCAG AA */
+  --color-text: #f7f3ec;
+  --color-text-dim: #a8a093;
+  --color-text-faint: #8c8477; /* kept >= 4.5:1 against --color-bg and --color-surface for WCAG AA */
 
-  --color-accent: #5eead4;
-  --color-accent-soft: rgba(94, 234, 212, 0.12);
-  --color-accent-blue: #60a5fa;
+  --color-accent: #ff9d4d;
+  --color-accent-soft: rgba(255, 157, 77, 0.12);
+  --color-accent-gold: #ffd166;
 
-  --gradient-accent: linear-gradient(120deg, #5eead4 0%, #60a5fa 100%);
+  --gradient-accent: linear-gradient(120deg, #ff9d4d 0%, #ffd166 100%);
 
   --font-display: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -28,6 +31,7 @@
   --nav-height: 84px;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-cinematic: cubic-bezier(0.22, 1, 0.36, 1);
   --transition-base: 0.4s var(--ease-out);
 }
 

@@ -1,17 +1,17 @@
+import { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { CONTACT_EMAIL } from '../data/site.js';
+import { useScrollRevealStyle } from '../hooks/useScrollReveal.js';
 import './Contact.css';
 
 export default function Contact() {
+  const contentRef = useRef(null);
+  const contentStyle = useScrollRevealStyle(contentRef, { distance: 36, scaleFrom: 0.96 });
+
   return (
     <section id="contact" className="section contact">
       <div className="container contact__inner">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        >
+        <motion.div ref={contentRef} style={contentStyle}>
           <span className="section-label">Contact</span>
           <h2 className="section-title contact__title">
             함께 미래를 만들어가요.

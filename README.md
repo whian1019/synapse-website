@@ -1,4 +1,4 @@
-﻿# SYNAPSE — Official Studio Website
+# SYNAPSE — Official Studio Website
 
 The official homepage for **SYNAPSE**, an independent AI · Game · Software
 studio. A dark, restrained, single-page marketing site with dedicated detail
@@ -73,6 +73,35 @@ npm run lint      # oxlint
 ```
 
 ## Project structure
+
+```
+src/
+  components/
+    Navigation.jsx      Fixed nav, scroll-aware background, mobile menu
+    Hero.jsx             Hero section (logo, tagline, CTAs)
+    NeuralBackground.jsx Subtle canvas particle/network animation
+    Projects.jsx         "Projects" section, renders ProjectCard list
+    ProjectCard.jsx       Individual project card (links to detail page)
+    About.jsx             "About Synapse" section + keyword list
+    Vision.jsx             "Build. Create. Connect." brand statement
+    Contact.jsx             Contact CTA section
+    Footer.jsx               Site footer
+    ScrollManager.jsx        Scrolls to the right section on route/hash change
+  pages/
+    Home.jsx              Composes all homepage sections
+    ProjectDetail.jsx      Renders a single project from src/data/projects.js
+    NotFound.jsx            404 page
+  data/
+    projects.js            Single source of truth for project cards + detail pages
+    devlogs.js               Development-log entries (empty until real ones exist)
+    site.js                   Site-wide config (contact email, canonical URL)
+  styles/
+    global.css               Design tokens (colors, type, spacing) + base styles
+  App.jsx                    Router setup
+  main.jsx                    Entry point
+public/
+  synapse-logo.png            Official logo (nav, hero, footer, favicon, OG image)
+```
 
 ## Adding a new project
 

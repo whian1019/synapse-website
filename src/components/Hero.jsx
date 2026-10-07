@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
+import { useRef } from 'react';
 import NeuralBackground from './NeuralBackground.jsx';
 import './Hero.css';
 
@@ -15,10 +16,30 @@ const item = {
 };
 
 export default function Hero() {
+  const sectionRef = useRef(null);
+  const reduceMotion = useReducedMotion();
+
+  // As the hero scrolls out of view (progress 0 -> 1 across the section's
+  // own height), the content eases back and fades — a cinematic "zoom out"
+  // hand-off into the Projects section below, instead of a hard cut.
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+  const contentScale = useTransform(scrollYProgress, [0, 1], [1, 0.88]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const bgY = useTransform(scrollYProgress, [0, 1], [0, 120]);
+
+  const scaleStyle = reduceMotion ? 1 : contentScale;
+  const opacityStyle = reduceMotion ? 1 : contentOpacity;
+  const bgYStyle = reduceMotion ? 0 : bgY;
+
   return (
-    <section id="home" className="hero">
-      <div className="hero__grid" aria-hidden="true" />
-      <NeuralBackground />
+    <section id="home" className="hero" ref={sectionRef}>
+      <motion.div className="hero__bg-layer" style={{ y: bgYStyle }} aria-hidden="true">
+        <div className="hero__grid" />
+        <NeuralBackground />
+      </motion.div>
       <div className="hero__glow" aria-hidden="true" />
       <div className="hero__vignette" aria-hidden="true" />
 
@@ -27,6 +48,7 @@ export default function Hero() {
         variants={container}
         initial="hidden"
         animate="show"
+        style={{ scale: scaleStyle, opacity: opacityStyle }}
       >
         <motion.p variants={item} className="hero__kicker">
           AI · GAME · TECHNOLOGY

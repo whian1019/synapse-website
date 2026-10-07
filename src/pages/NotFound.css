@@ -13,12 +13,18 @@
   left: 50%;
   width: 640px;
   height: 640px;
-  transform: translate(-50%, -50%);
+  margin: -320px 0 0 -320px;
   border-radius: 50%;
   background: var(--color-accent);
   filter: blur(200px);
   opacity: 0.1;
   pointer-events: none;
+  animation: glow-breathe 7s var(--ease-cinematic) infinite;
+}
+
+@keyframes glow-breathe {
+  0%, 100% { opacity: 0.08; transform: scale(0.94); }
+  50% { opacity: 0.16; transform: scale(1.04); }
 }
 
 .not-found__inner {

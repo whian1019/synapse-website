@@ -8,6 +8,12 @@
   background: radial-gradient(ellipse 80% 60% at 50% 20%, #12141a 0%, #0a0a0d 60%);
 }
 
+.hero__bg-layer {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
 .hero__grid {
   position: absolute;
   inset: 0;

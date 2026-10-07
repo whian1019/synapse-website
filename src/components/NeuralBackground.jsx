@@ -63,7 +63,7 @@ export default function NeuralBackground() {
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < LINK_DISTANCE) {
             const opacity = (1 - dist / LINK_DISTANCE) * 0.26;
-            ctx.strokeStyle = `rgba(94, 234, 212, ${opacity})`;
+            ctx.strokeStyle = `rgba(255, 157, 77, ${opacity})`;
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
@@ -76,7 +76,7 @@ export default function NeuralBackground() {
       for (const n of nodes) {
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(244, 245, 247, 0.55)';
+        ctx.fillStyle = 'rgba(247, 243, 236, 0.55)';
         ctx.fill();
       }
 

@@ -1,14 +1,26 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { getProjectBySlug } from '../data/projects.js';
 import { getDevlogsByProject } from '../data/devlogs.js';
+import { useScrollRevealStyle, useParallaxY } from '../hooks/useScrollReveal.js';
 import NotFound from './NotFound.jsx';
 import './ProjectDetail.css';
 
 export default function ProjectDetail() {
   const { slug } = useParams();
   const project = getProjectBySlug(slug);
+
+  const glowRef = useRef(null);
+  const glowY = useParallaxY(glowRef, 40);
+  const descriptionRef = useRef(null);
+  const descriptionStyle = useScrollRevealStyle(descriptionRef, { distance: 24, scaleFrom: 0.98 });
+  const featuresRef = useRef(null);
+  const featuresStyle = useScrollRevealStyle(featuresRef, { distance: 28 });
+  const techRef = useRef(null);
+  const techStyle = useScrollRevealStyle(techRef, { distance: 20, scaleFrom: 1 });
+  const devlogRef = useRef(null);
+  const devlogStyle = useScrollRevealStyle(devlogRef, { distance: 28 });
 
   useEffect(() => {
     if (project) {
@@ -31,7 +43,12 @@ export default function ProjectDetail() {
         className="project-detail__hero"
         style={{ '--card-accent': project.accent }}
       >
-        <div className="project-detail__glow" aria-hidden="true" />
+        <motion.div
+          className="project-detail__glow"
+          ref={glowRef}
+          style={{ y: glowY }}
+          aria-hidden="true"
+        />
         <div className="container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -56,10 +73,8 @@ export default function ProjectDetail() {
       <div className="container project-detail__body">
         <motion.p
           className="project-detail__description"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          ref={descriptionRef}
+          style={descriptionStyle}
         >
           {project.description}
         </motion.p>
@@ -67,10 +82,8 @@ export default function ProjectDetail() {
         {project.features?.length > 0 && (
           <motion.div
             className="project-detail__section"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            ref={featuresRef}
+            style={featuresStyle}
           >
             <h2 className="project-detail__section-title">핵심 특징</h2>
             <ul className="project-detail__features">
@@ -84,15 +97,13 @@ export default function ProjectDetail() {
         {project.tech?.length > 0 && (
           <motion.div
             className="project-detail__section"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.6, delay: 0.15 }}
+            ref={techRef}
+            style={techStyle}
           >
             <h2 className="project-detail__section-title">사용 기술</h2>
             <ul className="project-detail__tags">
-              {project.tech.map((tech) => (
-                <li key={tech}>{tech}</li>
+              {project.tech.map((t) => (
+                <li key={t}>{t}</li>
               ))}
             </ul>
           </motion.div>
@@ -104,10 +115,8 @@ export default function ProjectDetail() {
 
         <motion.div
           className="project-detail__section project-detail__devlog"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          ref={devlogRef}
+          style={devlogStyle}
         >
           <h2 className="project-detail__section-title">개발 로그</h2>
           {logs.length === 0 ? (

@@ -1,4 +1,6 @@
+import { useRef } from 'react';
 import { motion } from 'framer-motion';
+import { useScrollRevealStyle } from '../hooks/useScrollReveal.js';
 import './About.css';
 
 const KEYWORDS = ['AI', 'GAME', 'SOFTWARE', 'INNOVATION'];
@@ -6,25 +8,27 @@ const KEYWORDS = ['AI', 'GAME', 'SOFTWARE', 'INNOVATION'];
 const listVariants = {
   hidden: {},
   show: {
-    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+    transition: { staggerChildren: 0.1, delayChildren: 0.1 },
   },
 };
 
 const itemVariants = {
+  // x stays <= the container's own side padding (22px at mobile widths —
+  // see .container in global.css) so the pre-reveal "hidden" position
+  // never pushes this element past the viewport edge and causes a stray
+  // horizontal scrollbar before it's animated in.
   hidden: { opacity: 0, x: 16 },
-  show: { opacity: 1, x: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+  show: { opacity: 1, x: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
 };
 
 export default function About() {
+  const headingRef = useRef(null);
+  const headingStyle = useScrollRevealStyle(headingRef, { distance: 40, scaleFrom: 0.95 });
+
   return (
     <section id="about" className="section about">
       <div className="container about__grid">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        >
+        <motion.div ref={headingRef} style={headingStyle}>
           <span className="section-label">About Synapse</span>
           <h2 className="section-title">
             한 프로젝트씩,{' '}
