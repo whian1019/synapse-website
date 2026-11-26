@@ -269,3 +269,36 @@
 .project-detail__cta {
   margin-top: 56px;
 }
+
+.project-detail__cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: 48px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.project-detail__gallery {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.project-detail__gallery img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.25s, border-color 0.25s;
+}
+
+.project-detail__gallery a:hover img {
+  transform: scale(1.02);
+  border-color: var(--card-accent);
+}

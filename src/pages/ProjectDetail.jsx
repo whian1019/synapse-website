@@ -90,6 +90,14 @@ export default function ProjectDetail() {
       </div>
 
       <div className="container project-detail__body">
+        {project.cover && (
+          <img
+            className="project-detail__cover"
+            src={project.cover.src}
+            alt={project.cover.alt}
+          />
+        )}
+
         <motion.p
           className="project-detail__description"
           ref={descriptionRef}
@@ -111,6 +119,21 @@ export default function ProjectDetail() {
               ))}
             </ul>
           </motion.div>
+        )}
+
+        {project.gallery?.length > 0 && (
+          <div className="project-detail__section">
+            <h2 className="project-detail__section-title">게임 화면</h2>
+            <ul className="project-detail__gallery">
+              {project.gallery.map((img) => (
+                <li key={img.src}>
+                  <a href={img.src} target="_blank" rel="noopener noreferrer">
+                    <img src={img.src} alt={img.alt} loading="lazy" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
 
         {project.tech?.length > 0 && (
