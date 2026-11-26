@@ -108,6 +108,24 @@
   line-height: 1.4;
 }
 
+.project-detail__link {
+  display: inline-block;
+  margin-top: 24px;
+  padding: 12px 22px;
+  border: 1px solid var(--card-accent);
+  border-radius: 999px;
+  color: var(--card-accent);
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+.project-detail__link:hover {
+  background: var(--card-accent);
+  color: #0a070d;
+}
+
 .project-detail__body {
   /* Note: only set vertical padding here — .container already supplies the
      horizontal gutter, and a shorthand padding would zero it out. */
