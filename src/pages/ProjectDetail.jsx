@@ -75,6 +75,16 @@ export default function ProjectDetail() {
 
             <h1 className="project-detail__title">{project.title}</h1>
             <p className="project-detail__oneliner">{project.oneLiner}</p>
+            {project.link && (
+              <a
+                className="project-detail__link"
+                href={project.link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {project.link.label} ↗
+              </a>
+            )}
           </motion.div>
         </div>
       </div>
