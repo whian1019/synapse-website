@@ -39,8 +39,8 @@ export const projects = [
     title: 'DARK SWARM',
     category: 'GAME',
     status: 'Released',
-    tagline: '한 마리씩 쏘지 마라. 가둬서 터뜨려라. 말뚝으로 울타리를 쳐 어둠의 군세를 한 번에 터뜨리는 픽셀 서바이벌 게임입니다.',
-    oneLiner: '한 마리씩 쏘지 마라. 가둬서 터뜨려라.',
+    tagline: '말뚝으로 울타리를 쳐 어둠의 군세를 한 번에 터뜨리는 픽셀 서바이벌 게임입니다.',
+    oneLiner: "Don't shoot them one by one. Trap them. Blow them up.",
     description:
       'DARK SWARM은 SYNAPSE가 출시한 픽셀 서바이벌 게임입니다. 무너진 도시, 세상의 밑바닥에 봉인됐던 어둠이 여섯 경계를 뚫고 쏟아져 나옵니다. 기억을 잃은 기록관이 되어 공허의 말뚝을 박고, 사슬로 울타리를 닫아 안에 갇힌 적을 한꺼번에 터뜨리세요. 많이 가둘수록 더 큰 폭발과 연쇄 콤보가 이어집니다. 오염된 수호자들을 정화하며 여섯 경계를 하나씩 다시 봉인하는 것이 목표입니다. 챕터 1은 itch.io에서 브라우저로 무료 체험할 수 있습니다.',
     features: [
@@ -54,7 +54,16 @@ export const projects = [
     tech: ['HTML5', 'Canvas 2D', 'JavaScript', 'Windows · Browser'],
     progress:
       '현재 itch.io에서 판매 중입니다(정가 $4.99). 챕터 1은 브라우저에서 무료로 플레이할 수 있습니다. 일부 그림과 영상 에셋은 AI 도구의 도움을 받아 만든 뒤 개발자가 직접 다듬었습니다.',
-    link: { href: 'https://whian.itch.io/dark-swarm', label: 'itch.io에서 무료 체험 / 구매' },
+    link: { href: 'https://whian.itch.io/dark-swarm', label: 'Play free demo on itch.io' },
+    cover: { src: '/projects/dark-swarm/banner.jpg', alt: 'DARK SWARM 대표 이미지' },
+    gallery: [
+      { src: '/projects/dark-swarm/shot_01_void_catastrophe.jpg', alt: '울타리 안의 군세를 한 번에 터뜨리는 VOID CATASTROPHE' },
+      { src: '/projects/dark-swarm/shot_02_sweep_ice.jpg', alt: '챕터 2 얼음 지역에서 말뚝을 쓸어 울타리 치기' },
+      { src: '/projects/dark-swarm/shot_03_rule_cards.jpg', alt: '울타리 규칙을 바꾸는 규칙 카드 선택' },
+      { src: '/projects/dark-swarm/shot_04_boss_queen.jpg', alt: '챕터 1 보스 어둠의 여왕' },
+      { src: '/projects/dark-swarm/shot_05_lobby.jpg', alt: '로비 — 출격문과 기록관' },
+      { src: '/projects/dark-swarm/shot_06_shop.jpg', alt: '오늘의 상점' },
+    ],
     tags: ['Released', 'Survivor-like', 'Pixel Art', 'Dark Fantasy'],
     accent: '#ec4899',
   },
